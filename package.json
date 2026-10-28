@@ -3,14 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-  "test": "playwright test tests/junior",
-  "test:junior": "playwright test tests/junior",
-  "test:repeat": "playwright test tests/junior --repeat-each=3",
-  "typecheck": "tsc --noEmit",
-  "report": "playwright show-report",
-  "test:stability": "node scripts/three-runs.cjs",
-  "test:booking-http": "playwright test tests/junior/booking-http.spec.ts"
-},
+    "test": "playwright test",
+    "test:junior": "playwright test tests/booking-http.spec.ts tests/demoqa-registration.spec.ts tests/httpbin.spec.ts tests/pagination.spec.ts",
+    "test:middle": "playwright test tests/booking-crud.spec.ts tests/dummyjson-boundaries.spec.ts tests/dummyjson-negative.spec.ts tests/dummyjson.spec.ts tests/related-resources.spec.ts",
+    "test:repeat": "playwright test --repeat-each=3",
+    "typecheck": "tsc --noEmit",
+    "report": "playwright show-report",
+    "test:stability": "node scripts/three-runs.cjs",
+    "test:booking-http": "playwright test tests/booking-http.spec.ts",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:regression": "playwright test --grep-invert @smoke"
+  },
   "devDependencies": {
     "@playwright/test": "^1.56.0",
     "@types/node": "^22.0.0",

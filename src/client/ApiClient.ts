@@ -1,23 +1,42 @@
 import type { APIRequestContext, APIResponse } from '@playwright/test';
 
-/** Sends requests to one API host using shared headers and Playwright's request context. */
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+
+type RequestOptions = {
+  data?: unknown;
+  params?: Record<string, string | number>;
+  headers?: Record<string, string>;
+};
+
 export class ApiClient {
-  constructor(private readonly request: APIRequestContext, private readonly baseUrl: string, private readonly headers: Record<string, string> = {}) {}
+  /**
+   * Creates an HTTP client for a base URL with optional default headers.
+   * @param request - Playwright API request context.
+   * @param baseUrl - Base URL of the target API.
+   * @param headers - Default headers applied to requests.
+   */
+  constructor(
+    private readonly request: APIRequestContext,
+    private readonly baseUrl: string,
+    private readonly headers: Record<string, string> = {},
+  ) {}
 
   /**
-   * Sends an HTTP request without throwing for non-2xx responses.
-   * @param method HTTP method.
-   * @param path Endpoint path relative to the configured base URL.
-   * @param options Optional JSON body, query parameters, and request headers.
-   * @returns The raw response for assertions and runtime schema validation.
+   * Sends an HTTP request and returns the response without throwing on non-2xx status codes.
+   * @param method - HTTP method to execute.
+   * @param path - Endpoint path relative to the base URL.
+   * @param options - Optional request body, query parameters, and headers.
+   * @returns Playwright API response.
    */
-  send(method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE', path: string, options: { data?: unknown; params?: Record<string, string | number>; headers?: Record<string, string> } = {}): Promise<APIResponse> {
-    return this.request.fetch(`${this.baseUrl.replace(/\/+$/, '')}/${path.replace(/^\/+/, '')}`, {
+  send(method: HttpMethod, path: string, options: RequestOptions = {}): Promise<APIResponse> {
+    const url = `${this.baseUrl.replace(/\/+$/, '')}/${path.replace(/^\/+/, '')}`;
+
+    return this.request.fetch(url, {
       method,
       data: options.data,
       params: options.params,
       headers: { ...this.headers, ...options.headers },
-      failOnStatusCode: false
+      failOnStatusCode: false,
     });
   }
 }
