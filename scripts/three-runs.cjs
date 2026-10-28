@@ -9,7 +9,7 @@ mkdirSync(outputDirectory, { recursive: true });
 for (let run = 1; run <= 3; run++) {
  const result = spawnSync(
   process.execPath,
-  [playwrightCli, 'test', 'tests/junior', '--reporter=line'],
+  [playwrightCli, 'test', '--reporter=line'],
   {
     encoding: 'utf8',
     env: { ...process.env, CI: '1' },
@@ -28,4 +28,4 @@ for (let run = 1; run <= 3; run++) {
   }
 }
 
-process.stdout.write('Three independent runs passed for the Junior API suite.\n');
+process.stdout.write('Three independent runs passed for the API suite.\n');

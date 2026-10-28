@@ -6,3 +6,5 @@ test-results/
 stability-results/
 .vscode/
 README-update-*.md
+
+docs/
